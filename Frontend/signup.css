@@ -1,0 +1,63 @@
+#main-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #ffffff;
+}
+
+#main-container .form-signup {
+  width: 100%;
+  max-width: 550px;
+  padding: 15px;
+  margin: auto;
+}
+#main-container .form-group {
+  margin-bottom: 20px; /* 입력 폼 사이의 간격 조정 */
+}
+
+#main-container .form-row {
+  display: flex;
+  gap: 13px; /* 열 간의 간격 조정 */
+}
+
+#main-container .form-signup .checkbox {
+  font-weight: 400;
+}
+
+#main-container .form-signup .form-floating:focus-within {
+  z-index: 2;
+}
+
+/* 회원가입 버튼 스타일 */
+#main-container .form-signup .btn-primary {
+  background-color: #5463ff; /* 배경색 변경 */
+  border: none; /* 테두리 제거 */
+  color: #fff; /* 글자색 변경 */
+  padding: 13px 40px; /* 패딩 조정 */
+  font-size: 15px; /* 글꼴 크기 변경 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  font-weight: bold;
+  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+}
+
+#main-container .form-signup .btn-primary:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변경 */
+}
+
+/* h1 제목 스타일 */
+#main-container .form-signup h1 {
+  font-family: 'Arial', sans-serif; /* 폰트 패밀리 */
+  font-size: 25; /* 폰트 크기 */
+  font-weight: bold; /* 폰트 굵기 */
+  color: #5463ff; /* 폰트 색상 */
+}
+
+/* h1 제목 스타일 */
+#main-container .custom-h3 {
+  font-size: 15px; /* 폰트 크기 */
+  font-weight: bold; /* 폰트 굵기 */
+  text-align: left; /* 왼쪽 정렬 */
+  margin-bottom: 20px; /* 아래 폼과 간격 추가 */
+}

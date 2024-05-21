@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Air 5T4R</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .logo-img {
+        width: 80px;
+        height: 64px;
+      }
+      .nav-link {
+        margin-right: 15px; /* 항목 간의 간격 조정 */
+        font-family: Arial, sans-serif; /* 글꼴 변경 */
+        font-size: 1rem; /* 글꼴 크기 변경 */
+        font-weight: bold;
+      }
+      .nav-link:last-child {
+        margin-right: 0; /* 마지막 항목의 오른쪽 여백 제거 */
+      }
+
+      /* 로그인 버튼 스타일 */
+      .btn-outline-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-outline-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      /* 회원가입 버튼 스타일 */
+      .btn-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1;
+      }
+      footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .form-section {
+        margin: 20px 0;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Load header
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header").innerHTML = data;
+          })
+          .catch(error => console.error("Error loading header:", error));
+        
+        // Load footer
+        fetch("footer.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("footer").innerHTML = data;
+          })
+          .catch(error => console.error("Error loading footer:", error));
+
+        // Load signup CSS for main container
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'signup.css';
+        document.getElementById('main-container').appendChild(link);
+      });
+    </script>
+  </head>
+  <body>
+
+    <div id="header"></div>
+
+    <main id="main-container">
+      <div class="container">
+        <!-- Sign-up form -->
+        <div class="form-signup">
+          <div class="custom-h3">
+            AIR 5T4R에<br>
+            <span> 회원가입해주세요:)</span>
+          </div>
+          <form>
+            <div class="form-group">
+                <label for="inputID">ID</label>
+                <input type="text" class="form-control" id="inputID" placeholder="ID">
+            </div>
+            <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="text" class="form-control" id="inputPassword" placeholder="Password">
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputFirstName">First Name</label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputLastName">Last Name</label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name">
+              </div>
+            </div>
+
+              <div class="form-group">
+                <label for="inputPhone">Phone</label>
+                <input type="text" class="form-control" id="inputPhone" placeholder="000-0000-0000">
+              </div>
+              <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+              </div>
+
+
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary">Sign up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></script>
+  </body>
+</html>
