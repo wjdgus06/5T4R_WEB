@@ -82,6 +82,15 @@
       }
       footer {
         background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .form-section {
+        margin: 20px 0;
       }
     </style>
 
@@ -114,10 +123,40 @@
 
     <main>
       <div class="container">
-        <!-- 메인 콘텐츠 -->
-        <h1>Welcome to My Website</h1>
-        <p>This is the main content of the page.</p>
+      <div class="form-section">
+        <label for="departure" class="form-label">출발지</label>
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            출발지 선택
+          </button>
+          <ul class="dropdown-menu" id="departure">
+            <li><a class="dropdown-item" href="#">서울/인천(ICN)</a></li>
+            <li><a class="dropdown-item" href="#">샌프란시스코(SFO)</a></li>
+            <li><a class="dropdown-item" href="#">로스앤젤레스(LAX)</a></li>
+            <li><a class="dropdown-item" href="#">뉴욕/뉴어크 리버티(EWR)</a></li>
+            <li><a class="dropdown-item" href="#">방콕(BKK)</a></li>
+            <!-- 더 많은 출발지 항목을 추가할 수 있습니다. -->
+          </ul>
+        </div>
       </div>
+      
+      <div class="form-section">
+        <label for="arrival" class="form-label">도착지</label>
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            도착지 선택
+          </button>
+          <ul class="dropdown-menu" id="arrival">
+            <li><a class="dropdown-item" href="#">서울/인천(ICN)</a></li>
+            <li><a class="dropdown-item" href="#">샌프란시스코(SFO)</a></li>
+            <li><a class="dropdown-item" href="#">로스앤젤레스(LAX)</a></li>
+            <li><a class="dropdown-item" href="#">뉴욕/뉴어크 리버티(EWR)</a></li>
+            <li><a class="dropdown-item" href="#">방콕(BKK)</a></li>
+            <!-- 더 많은 도착지 항목을 추가할 수 있습니다. -->
+          </ul>
+        </div>
+      </div>
+    </div>
     </main>
 
       <div id="footer"></div>
