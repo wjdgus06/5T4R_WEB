@@ -2,12 +2,6 @@
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if (!isset($data['user_id']) || !isset($data['password'])) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Missing user_id or password']);
-    exit;
-}
-
 $user_id = $data['user_id'];
 $password = $data['password'];
 

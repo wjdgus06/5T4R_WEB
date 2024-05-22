@@ -7,7 +7,6 @@ switch ($request_method) {
     case 'POST':
         require 'signin.php';
         break;
-
     default:
         header("HTTP/1.0 405 Method Not Allowed");
         echo json_encode(['error' => 'Method Not Allowed']);
