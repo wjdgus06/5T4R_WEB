@@ -116,7 +116,44 @@
         link.rel = 'stylesheet';
         link.href = 'signup.css';
         document.getElementById('main-container').appendChild(link);
-      });
+        });
+        async function signup() {
+        const user_id = document.getElementById('user_id').value;
+        const password = document.getElementById('password').value;
+        const firstname = document.getElementById('firstname').value;
+        const lastname = document.getElementById('lastname').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+
+        const messageDiv = document.getElementById('message'); // 메시지를 표시할 요소 정의
+        
+        try {
+          const response = await fetch('../Backend/signup_api.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ user_id, firstname, lastname, password, phone, email })
+          });
+          
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // 회원가입에 성공하셨습니다:) ALERT창..?
+            window.location.href = '/Frontend/signin.html'; // 리다이렉트할 메인 화면 URL
+          } else {
+              messageDiv.textContent = result.message; // 메시지 표시
+              messageDiv.style.color = 'red'; // 메시지 스타일 설정
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while processing your request.');
+        }
+      }
     </script>
   </head>
   <body>
@@ -131,33 +168,33 @@
             AIR 5T4R에<br>
             <span> 회원가입해주세요:)</span>
           </div>
-          <form>
+          <form onsubmit="event.preventDefault(); signup();">
             <div class="form-group">
-                <label for="inputID">ID</label>
-                <input type="text" class="form-control" id="inputID" placeholder="ID">
+                <label for="user_id">ID</label>
+                <input type="text" class="form-control" id="user_id" placeholder="ID">
             </div>
             <div class="form-group">
-                <label for="inputPassword">Password</label>
-                <input type="text" class="form-control" id="inputPassword" placeholder="Password">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" id="password" placeholder="Password">
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputFirstName">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name">
+                <label for="firstname">First Name</label>
+                <input type="text" class="form-control" id="firstname" placeholder="First Name">
               </div>
               <div class="form-group col-md-6">
-                <label for="inputLastName">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" placeholder="Last Name">
               </div>
             </div>
 
               <div class="form-group">
-                <label for="inputPhone">Phone</label>
-                <input type="text" class="form-control" id="inputPhone" placeholder="000-0000-0000">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" placeholder="000-0000-0000">
               </div>
               <div class="form-group">
-                <label for="inputEmail">Email</label>
-                <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email">
               </div>
 
 
