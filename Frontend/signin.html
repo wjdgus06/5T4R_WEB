@@ -84,6 +84,14 @@
         background-color: #f8f9fa;
         border-top: 1px solid #e9ecef;
       }
+
+      .message {
+        font-size: 1rem;
+        color: red;
+        font-weight: bold;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 10px;
+      }
     </style>
 
     <!-- Custom styles for this template -->
@@ -113,6 +121,38 @@
         link.href = 'signin.css';
         document.getElementById('main-container').appendChild(link);
       });
+
+      async function login() {
+        const user_id = document.getElementById('user_id').value;
+        const password = document.getElementById('password').value;
+        const messageDiv = document.getElementById('message'); // 메시지를 표시할 요소 정의
+        
+        try {
+          const response = await fetch('../Backend/signin_api.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ user_id, password })
+          });
+          
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            window.location.href = '/Frontend/index.html'; // 리다이렉트할 메인 화면 URL
+          } else {
+              messageDiv.textContent = result.message; // 메시지 표시
+              messageDiv.style.color = 'red'; // 메시지 스타일 설정
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while processing your request.');
+        }
+      }
     </script>
   </head>
   <body>
@@ -123,17 +163,18 @@
         <div class="container">
           <!-- Sign-in form -->
           <div class="form-signin text-center">
-            <form>
+            <form onsubmit="event.preventDefault(); login();">
               <div class="custom-h3">
                 AIR 5T4R에<br>
                 <span> 로그인해주세요:)</span>
               </div>
+              <div id="message"></div> 
               <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="text" class="form-control" id="user_id" placeholder="name@example.com">
                 <label for="floatingInput">ID</label>
               </div>
               <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control" id="password" placeholder="Password">
                 <label for="floatingPassword">Password</label>
               </div>
               <div class="checkbox mb-3">
