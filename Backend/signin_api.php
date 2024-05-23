@@ -1,5 +1,6 @@
 <?php
 include 'connect.php';
+session_start();
 
 $request_method = $_SERVER['REQUEST_METHOD'];
 
