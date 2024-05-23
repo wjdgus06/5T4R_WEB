@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Air 5T4R</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+            }
+        }
+        .logo-img {
+            width: 80px;
+            height: 64px;
+        }
+        .nav-link {
+            margin-right: 15px; /* 항목 간의 간격 조정 */
+            font-family: Arial, sans-serif; /* 글꼴 변경 */
+            font-size: 1rem; /* 글꼴 크기 변경 */
+            font-weight: bold;
+        }
+        .nav-link:last-child {
+            margin-right: 0; /* 마지막 항목의 오른쪽 여백 제거 */
+        }
+
+        body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        h3 {
+            font-family: Arial, Helvetica, sans-serif; /* 폰트를 Georgia로 변경 */
+            font-size: 1.25rem; /* 글꼴 크기 설정 */
+            color: #333; /* 글꼴 색상 설정 */
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .notice-list {
+            list-style: none;
+            padding: 0;
+        }
+        .notice-item {
+            display: none;
+            padding: 15px;
+            margin-bottom: 15px; /* 공지사항 항목 간의 간격을 더 추가 */
+            border-bottom: 1px solid #ddd;
+        }
+        .notice-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .notice-date {
+            font-size: 15px;
+            color: #888;
+            text-align: right;
+        }
+        .notice-content {
+            font-size: 13px;
+            color: #666;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center; /* 페이지네이션 버튼을 가운데 정렬 */
+        }
+        .page-item {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px; /* 곡선 테두리 추가 */
+            cursor: pointer;
+        }
+        .page-item.active {
+            background-color: #6e73eb;
+            color: white;
+            border-radius: 5px; /* 곡선 테두리 유지 */
+        }
+        .custom-container {
+            max-width: 1000px; /* 원하는 너비로 설정 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+    </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Load header
+                fetch("header.html")
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("header").innerHTML = data;
+                    })
+                    .catch(error => console.error("Error loading header:", error));
+                
+                // Load footer
+                fetch("footer.html")
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("footer").innerHTML = data;
+                    })
+                    .catch(error => console.error("Error loading footer:", error));
+    
+                const itemsPerPage = 4;
+                const noticeList = document.getElementById('noticeList');
+                const paginationContainer = document.getElementById('pagination');
+
+                async function fetchNotices() {
+                    const response = await fetch('../Backend/notices.php');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const notices = await response.json();
+                    return notices;
+                }
+
+                function showPage(notices, page) {
+                    noticeList.innerHTML = '';
+                    const start = (page - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    const pageItems = notices.slice(start, end);
+
+                    pageItems.forEach(notice => {
+                        const noticeItem = document.createElement('li');
+                        noticeItem.classList.add('notice-item');
+
+                        const noticeTitle = document.createElement('div');
+                        noticeTitle.classList.add('notice-title');
+                        noticeTitle.textContent = notice.title;
+
+                        const noticeDate = document.createElement('div');
+                        noticeDate.classList.add('notice-date');
+                        noticeDate.textContent = notice.date;
+
+                        const noticeContent = document.createElement('div');
+                        noticeContent.classList.add('notice-content');
+                        noticeContent.textContent = notice.content;
+
+                        noticeItem.appendChild(noticeTitle);
+                        noticeItem.appendChild(noticeDate);
+                        noticeItem.appendChild(noticeContent);
+
+                        noticeItem.style.display = 'block';
+                        noticeList.appendChild(noticeItem);
+                    });
+
+                    document.querySelectorAll('.page-item').forEach((button, index) => {
+                        button.classList.remove('active');
+                        if (index === page - 1) {
+                            button.classList.add('active');
+                        }
+                    });
+                }
+
+                function createPagination(pageCount) {
+                    paginationContainer.innerHTML = '';
+                    for (let i = 1; i <= pageCount; i++) {
+                        const pageButton = document.createElement('div');
+                        pageButton.textContent = i;
+                        pageButton.classList.add('page-item');
+                        pageButton.addEventListener('click', () => showPage(currentNotices, i));
+                        paginationContainer.appendChild(pageButton);
+                    }
+                }
+
+                let currentNotices = [];
+
+                fetchNotices().then(notices => {
+                    currentNotices = notices;
+                    const pageCount = Math.ceil(notices.length / itemsPerPage);
+                    createPagination(pageCount);
+                    showPage(notices, 1);
+                }).catch(error => {
+                    console.error('Error fetching notices:', error);
+                });
+        });
+        </script>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <main id="main-container">
+        <div class="custom-container">
+            <h3>공지사항</h3>
+            <ul class="notice-list" id="noticeList">
+                <!-- 공지사항 항목이 여기에 추가됩니다 -->
+            </ul>
+            <div class="pagination" id="pagination">
+                <!-- 페이지네이션 버튼이 여기에 추가됩니다 -->
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></script>
+</body>
+</html>
