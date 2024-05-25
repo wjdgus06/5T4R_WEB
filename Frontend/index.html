@@ -189,7 +189,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         // Load header
-        fetch("/Frontend/header.html")
+        fetch("/header.html")
           .then(response => response.text())
           .then(data => {
             document.getElementById("header").innerHTML = data;
@@ -197,7 +197,7 @@
           .catch(error => console.error("Error loading header:", error));
         
         // Load footer
-        fetch("/Frontend/footer.html")
+        fetch("/footer.html")
           .then(response => response.text())
           .then(data => {
             document.getElementById("footer").innerHTML = data;

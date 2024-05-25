@@ -9,19 +9,19 @@
 <body>
     <div class="container">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <a href="/Frontend/index.html" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                 <img src="image/logo.png" alt="Logo" class="me-2 logo-img">
             </a>
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/Frontend/index.html" class="nav-link px-2 link-secondary">Home</a></li>
+                <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">예매</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">조회</a></li>
-                <li><a href="/Frontend/notice.html" class="nav-link px-2 link-dark">공지사항</a></li>
+                <li><a href="/notice.html" class="nav-link px-2 link-dark">공지사항</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">Q/A</a></li>
             </ul>
             <div class="col-md-3 text-end" id="authButtons">
-                <a href="/Frontend/signin.html" class="btn btn-outline-primary-custom me-2">로그인</a>
-                <a href="/Frontend/signup.html" class="btn btn-outline-primary-custom me-2">회원가입</a>
+                <a href="/signin.html" class="btn btn-outline-primary-custom me-2">로그인</a>
+                <a href="/signup.html" class="btn btn-outline-primary-custom me-2">회원가입</a>
             </div>
         </header>
     </div>
@@ -33,8 +33,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/Frontend/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/Frontend/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                     }
                 })

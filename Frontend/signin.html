@@ -128,7 +128,7 @@
         const messageDiv = document.getElementById('message'); // 메시지를 표시할 요소 정의
         
         try {
-          const response = await fetch('../Backend/signin_api.php', {
+          const response = await fetch('/backend/signin_api.php', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -143,7 +143,7 @@
           const result = await response.json();
           
           if (result.success) {
-            window.location.href = '/Frontend/index.html'; // 리다이렉트할 메인 화면 URL
+            window.location.href = '/'; // 리다이렉트할 메인 화면 URL
           } else {
               messageDiv.textContent = result.message; // 메시지 표시
               messageDiv.style.color = 'red'; // 메시지 스타일 설정
