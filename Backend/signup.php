@@ -9,7 +9,7 @@ $lastname = $data['lastname'];
 $phone = $data['phone'];
 $email = $data['email'];
 
-$sql = "insert into users (id, FirstName, LastName, password, phone, email) Values ('$user_id', '$firstname', '$lastname', '$password', '$phone', '$email')";
+$sql = "insert into users (user_id, FirstName, LastName, password, phone, email) Values ('$user_id', '$firstname', '$lastname', '$password', '$phone', '$email')";
 $result = $connect->query($sql);
 
 header('Content-Type: application/json');

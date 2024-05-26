@@ -6,7 +6,7 @@ $data = json_decode($input, true);
 $user_id = $data['user_id'];
 $password = $data['password'];
 
-$sql = "SELECT * FROM users WHERE id = '$user_id' AND password = '$password'";
+$sql = "SELECT * FROM users WHERE user_id = '$user_id' AND password = '$password'";
 $result = $connect->query($sql);
 
 header('Content-Type: application/json');
