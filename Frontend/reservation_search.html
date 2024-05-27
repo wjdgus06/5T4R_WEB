@@ -119,6 +119,7 @@
           .then(response => response.text())
           .then(data => {
             document.getElementById("header").innerHTML = data;
+            checkSession();
           })
           .catch(error => console.error("Error loading header:", error));
         
@@ -130,6 +131,25 @@
           })
           .catch(error => console.error("Error loading footer:", error));
       });
+      function checkSession() {
+            fetch('/backend/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Session data:', data);
+                    const authButtons = document.getElementById('authButtons');
+                    if (data.loggedIn) {
+                        authButtons.innerHTML = `
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                        `;
+                    }
+                })
+                .catch(error => console.error('Error checking session:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkSession();
+        });
     </script>
   </head>
   <body>
