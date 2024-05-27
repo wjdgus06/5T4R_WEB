@@ -15,7 +15,7 @@
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">예매</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">조회</a></li>
+                <li><a href="/reservation_search.html" class="nav-link px-2 link-dark">조회</a></li>
                 <li><a href="/notice.html" class="nav-link px-2 link-dark">공지사항</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">Q/A</a></li>
             </ul>
@@ -26,10 +26,11 @@
         </header>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('/Backend/check_session.php')
+        function checkSession() {
+            fetch('/backend/check_session.php')
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Session data:', data);
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
@@ -39,6 +40,10 @@
                     }
                 })
                 .catch(error => console.error('Error checking session:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkSession();
         });
     </script>
 </body>

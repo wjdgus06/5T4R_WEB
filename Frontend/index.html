@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
 
     <style>
       .bd-placeholder-img {
@@ -92,50 +93,19 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         max-width: 300px;
         text-align: left;
+        margin-right: 20px;
       }
       .form-container h2 {
         font-size: 16px;
         font-weight: bold;
         margin-bottom: 20px;
       }
-      .form-section {
-        margin-bottom: 15px;
-        text-align: left;
-        position: relative;
-        border: none;
-      }
-      .form-section label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
-      }
-      .form-section .dropdown-toggle {
-        width: 100%;
-        text-align: left;
-        background-color: #ffffff;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .form-section .dropdown-menu {
-        width: 350px;
-      }
-      .form-section:not(:last-child)::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: #e0e0e0;
-      }
       .btn-search {
         width: 100%;
-        padding: 15px;
-        font-size: 18px;
+        padding: 12px;
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 20px;
         background-color: #5463ff;
         color: #ffffff;
         border: none;
@@ -145,54 +115,137 @@
       .btn-search:hover {
         background-color: #003f7f;
       }
-      /* 달력 스타일 */
-      .form-section .dropdown-menu .calendar-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-        width: 350px; /* 달력의 너비 설정 */
+      .results-container {
+        flex: 1;
+        padding: 30px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 700px;
       }
-      .calendar-container .cal-month {
+      .flight-result {
         display: flex;
         justify-content: space-between;
-        width: 100%;
         align-items: center;
+        background: #ffffff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      .calendar-container .cal-weekdays, .calendar-container .cal-days {
+      .flight-info {
         display: flex;
-        flex-wrap: wrap;
-        width: 100%;
+        flex-direction: column;
       }
-
-      .calendar-container .cal-weekday{
-        width: 14.28%;
-        text-align: center;
+      .flight-price {
+        text-align: right;
       }
-
-      .calendar-container .cal-day {
-        width: 14.28%;
-        text-align: center;
+      .flight-class {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
-      
-      .cal-btn {
-        width: 14.28%;
+      .flight-class .economy {
+        font-weight: bold;
+        color: #007bff;
+      }
+      .btn-book {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
         border: none;
-        background: none;
-        padding: 5px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .btn-book:hover {
+        background-color: #0056b3;
+      }
+      .book-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
       }
     </style>
 
     <!-- Custom styles for this template -->
     <link href="headers.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <div id="header"></div>
+
+    <div class="container d-flex">
+      <div class="form-container">
+        <h2>AIR 5T4R와<br>함께 떠나볼까요?</h2>
+        <div class="form-group mt-3">
+          <label for="departure">출발지</label>
+          <select class="form-select" id="departure">
+            <option selected>출발지를 선택하세요</option>
+            <option value="ICN">서울/인천(ICN)</option>
+            <option value="SFO">샌프란시스코(SFO)</option>
+            <option value="LAX">로스앤젤레스(LAX)</option>
+            <option value="EWR">뉴욕/뉴어크 리버티(EWR)</option>
+            <option value="BKK">방콕(BKK)</option>
+            <option value="NRT">도쿄/나리타(NRT)</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="destination">도착지</label>
+          <select class="form-select" id="destination">
+            <option selected>도착지를 선택하세요</option>
+            <option value="ICN">서울/인천(ICN)</option>
+            <option value="SFO">샌프란시스코(SFO)</option>
+            <option value="LAX">로스앤젤레스(LAX)</option>
+            <option value="EWR">뉴욕/뉴어크 리버티(EWR)</option>
+            <option value="BKK">방콕(BKK)</option>
+            <option value="NRT">도쿄/나리타(NRT)</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="date-range">날짜 선택</label>
+          <div class="input-group input-daterange">
+            <input type="text" class="form-control" placeholder="가는날" id="start-datepicker" readonly>
+            <input type="text" class="form-control" placeholder="오는날" id="end-datepicker" readonly>
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <label for="passengers">인원</label>
+          <input type="number" class="form-control" id="passengers" placeholder="인원수를 입력하세요" min="1" max="10">
+        </div>
+
+        <button class="btn btn-search" id="search-btn">항공권 검색</button>
+      </div>
+      <div class="results-container" id="results-container">
+        <!-- 검색 결과가 여기에 표시됩니다. -->
+      </div>
+      <div class="book-container" id="book-container">
+        <!-- 예약하기 버튼이 여기에 표시됩니다. -->
+      </div>
+    </div>
+
+    <div id="footer"></div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.js"></script>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
+      $(document).ready(function() {
         // Load header
         fetch("/header.html")
           .then(response => response.text())
           .then(data => {
-            document.getElementById("header").innerHTML = data;
+            $("#header").html(data);
+
+            const script = document.createElement('script');
+            script.text = "checkSession();";
+            document.body.appendChild(script);
           })
           .catch(error => console.error("Error loading header:", error));
         
@@ -200,175 +253,74 @@
         fetch("/footer.html")
           .then(response => response.text())
           .then(data => {
-            document.getElementById("footer").innerHTML = data;
+            $("#footer").html(data);
           })
           .catch(error => console.error("Error loading footer:", error));
-          // Dropdown selection
-        document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(function(element) {
-          element.addEventListener('click', function(event) {
-            event.preventDefault();
-            const dropdownToggle = this.closest('.btn-group').querySelector('.dropdown-toggle');
-            dropdownToggle.textContent = this.textContent;
-          });
+        
+        // Initialize date range picker
+        $('.input-daterange').datepicker({
+          format: 'yyyy-mm-dd',
+          autoclose: true,
+          todayHighlight: true,
+          startDate: new Date() // 오늘 날짜 이전은 선택 불가
         });
-        document.querySelectorAll('.cal-days button').forEach(function (button) {
-          button.addEventListener('click', function () {
-          button.classList.toggle('cal-btn');
+
+        $('#search-btn').click(function() {
+          const departure = $('#departure').val();
+          const destination = $('#destination').val();
+          const startDate = $('#start-datepicker').val();
+          const endDate = $('#end-datepicker').val();
+          const passengers = $('#passengers').val();
+
+          if (!departure || !destination || !startDate || !endDate || !passengers) {
+            alert('모든 항목을 선택해주세요.');
+            return;
+          }
+
+          // flight data
+          fetch('/backend/search_flight_api.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ departure, destination, startDate, endDate, passengers })
+          })
+          .then(response => response.text())  // 응답을 먼저 텍스트로 읽습니다.
+          .then(text => {
+            console.log('Raw response:', text);  // 원시 응답을 출력하여 문제를 확인합니다.
+            return JSON.parse(text);  // 그 다음 JSON으로 파싱합니다.
+          })
+          .then(data => {
+            console.log('Received data:', data);
+            const resultsContainer = $('#results-container');
+            resultsContainer.html(''); // Clear previous results
+
+            if (data.error) {
+              resultsContainer.append('<p>' + data.error + '</p>');
+              return;
+            }
+            data.forEach(flight => {
+              const flightDiv = $('<div class="flight-result">').html(`
+                <div class="flight-info">
+                  <div>
+                    <strong>${flight.departureTime}</strong> - <strong>${flight.arrivalTime}</strong> 
+                  </div>
+                  <div>${flight.departureAirport} -> ${flight.arrivalAirport}</div>
+                  
+                  <div>${flight.flightNumber}</div>
+                  <div>${flight.status}</div>
+                </div>
+                <div class="flight-class">
+                  <div class="economy">가격: ${flight.economyPrice} KRW</div>
+                </div>
+              `);
+              resultsContainer.append(flightDiv);
+            });
+
+          })
+          .catch(error => console.error('Error fetching flight data:', error));
         });
       });
-    });
     </script>
-  </head>
-  <body>
-
-      <div id="header"></div>
-
-      <div class="container">
-      <div class="form-container">
-        <h2>AIR 5T4R와<br>
-           함께 떠나볼까요?</h2>
-        <div class="form-section">
-          <label for="departure"></label>
-          <div class="btn-group dropend">
-            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              출발지
-            </button>
-            <ul class="dropdown-menu" id="departure">
-              <li><a class="dropdown-item" href="#">서울/인천(ICN)</a></li>
-              <li><a class="dropdown-item" href="#">샌프란시스코(SFO)</a></li>
-              <li><a class="dropdown-item" href="#">로스앤젤레스(LAX)</a></li>
-              <li><a class="dropdown-item" href="#">뉴욕/뉴어크 리버티(EWR)</a></li>
-              <li><a class="dropdown-item" href="#">방콕(BKK)</a></li>
-              <li><a class="dropdown-item" href="#">도쿄/나리타(NRT)</a></li>
-              <!-- 더 많은 출발지 항목을 추가할 수 있습니다. -->
-            </ul>
-          </div>
-        </div>
-        <div class="form-section">
-          <label for="arrival"></label>
-          <div class="btn-group dropend">
-            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              도착지
-            </button>
-            <ul class="dropdown-menu" id="arrival">
-              <li><a class="dropdown-item" href="#">서울/인천(ICN)</a></li>
-              <li><a class="dropdown-item" href="#">샌프란시스코(SFO)</a></li>
-              <li><a class="dropdown-item" href="#">로스앤젤레스(LAX)</a></li>
-              <li><a class="dropdown-item" href="#">뉴욕/뉴어크 리버티(EWR)</a></li>
-              <li><a class="dropdown-item" href="#">방콕(BKK)</a></li>
-              <li><a class="dropdown-item" href="#">도쿄/나리타(NRT)</a></li>
-              <!-- 더 많은 도착지 항목을 추가할 수 있습니다. -->
-            </ul>
-          </div>
-        </div>
-        <div class="form-section">
-          <label for="date"></label>
-          <div class="btn-group dropend">
-            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <span>날짜</span>
-            </button>
-            <div class="dropdown-menu calendar-container" id="date">
-              <div class="cal">
-                <div class="cal-month">
-                  <button class="btn cal-btn" type="button">
-                    <svg class="bi" width="16" height="16"><use xlink:href="#arrow-left-short"/></svg>
-                  </button>
-                  <strong class="cal-month-name">June</strong>
-                  <select class="form-select cal-month-name d-none">
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option selected value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                  </select>
-                  <button class="btn cal-btn" type="button">
-                    <svg class="bi" width="16" height="16"><use xlink:href="#arrow-right-short"/></svg>
-                  </button>
-                </div>
-                <div class="cal-weekdays text-body-secondary">
-                  <div class="cal-weekday">Sun</div>
-                  <div class="cal-weekday">Mon</div>
-                  <div class="cal-weekday">Tue</div>
-                  <div class="cal-weekday">Wed</div>
-                  <div class="cal-weekday">Thu</div>
-                  <div class="cal-weekday">Fri</div>
-                  <div class="cal-weekday">Sat</div>
-                </div>
-                <div class="cal-days">
-                  <button class="btn cal-day" disabled type="button">30</button>
-                  <button class="btn cal-day" disabled type="button">31</button>
-
-                  <button class="btn cal-day" type="button">1</button>
-                  <button class="btn cal-day" type="button">2</button>
-                  <button class="btn cal-day" type="button">3</button>
-                  <button class="btn cal-day" type="button">4</button>
-                  <button class="btn cal-day" type="button">5</button>
-                  <button class="btn cal-day" type="button">6</button>
-                  <button class="btn cal-day" type="button">7</button>
-
-                  <button class="btn cal-day" type="button">8</button>
-                  <button class="btn cal-day" type="button">9</button>
-                  <button class="btn cal-day" type="button">10</button>
-                  <button class="btn cal-day" type="button">11</button>
-                  <button class="btn cal-day" type="button">12</button>
-                  <button class="btn cal-day" type="button">13</button>
-                  <button class="btn cal-day" type="button">14</button>
-
-                  <button class="btn cal-day" type="button">15</button>
-                  <button class="btn cal-day" type="button">16</button>
-                  <button class="btn cal-day" type="button">17</button>
-                  <button class="btn cal-day" type="button">18</button>
-                  <button class="btn cal-day" type="button">19</button>
-                  <button class="btn cal-day" type="button">20</button>
-                  <button class="btn cal-day" type="button">21</button>
-
-                  <button class="btn cal-day" type="button">22</button>
-                  <button class="btn cal-day" type="button">23</button>
-                  <button class="btn cal-day" type="button">24</button>
-                  <button class="btn cal-day" type="button">25</button>
-                  <button class="btn cal-day" type="button">26</button>
-                  <button class="btn cal-day" type="button">27</button>
-                  <button class="btn cal-day" type="button">28</button>
-
-                  <button class="btn cal-day" type="button">29</button>
-                  <button class="btn cal-day" type="button">30</button>
-                  <button class="btn cal-day" type="button">31</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-section">
-          <label for="passenger"></label>
-          <div class="btn-group dropend">
-            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              인원
-            </button>
-            <ul class="dropdown-menu" id="passenger">
-              <li><a class="dropdown-item" href="#">성인 1</a></li>
-              <li><a class="dropdown-item" href="#">성인 2</a></li>
-              <li><a class="dropdown-item" href="#">성인 3</a></li>
-              <!-- 더 많은 승객 수 항목을 추가할 수 있습니다. -->
-            </ul>
-          </div>
-        </div>
-        <button class="btn btn-search">항공권 검색</button>
-      </div>
-    </div>
-    </main>
-
-      <div id="footer"></div>
-      
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>

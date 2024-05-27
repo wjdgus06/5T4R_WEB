@@ -115,6 +115,35 @@
             max-width: 1000px; /* 원하는 너비로 설정 */
             margin: 0 auto; /* 가운데 정렬 */
         }
+              /* 로그인 버튼 스타일 */
+      .btn-outline-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-outline-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      /* 회원가입 버튼 스타일 */
+      .btn-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -123,6 +152,8 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("header").innerHTML = data;
+
+                    checkSession(); // 헤더 로드 후 checkSession 호출
                 })
                 .catch(error => console.error("Error loading header:", error));
             
@@ -209,7 +240,27 @@
                 console.error('Error fetching notices:', error);
             });
         });
+        function checkSession() {
+            fetch('/backend/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Session data:', data);
+                    const authButtons = document.getElementById('authButtons');
+                    if (data.loggedIn) {
+                        authButtons.innerHTML = `
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                        `;
+                    }
+                })
+                .catch(error => console.error('Error checking session:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkSession();
+        });
     </script>
+    <link href="headers.css" rel="stylesheet">
 </head>
 <body>
 
