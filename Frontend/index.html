@@ -13,6 +13,11 @@
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+    <!-- flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
     <style>
       .bd-placeholder-img {
@@ -113,7 +118,7 @@
         transition: background-color 0.3s ease;
       }
       .btn-search:hover {
-        background-color: #003f7f;
+        background-color: #4d5aee;
       }
       .results-container {
         flex: 1;
@@ -121,37 +126,41 @@
         background: #f8f9fa;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 700px;
+        max-width: 1000px;
       }
       .flight-result {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #ffffff;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #ffffff;
+          padding: 20px;
+          margin-bottom: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      .flight-info {
-        display: flex;
-        flex-direction: column;
+
+      .flight-info, .flight-class {
+          flex-grow: 1;
       }
+
+
+      .btn-book {
+          margin-left: 20px; /* 예약 버튼과 정보 사이 간격 */
+          white-space: nowrap; /* 버튼 텍스트 줄바꿈 방지 */
+      }
+
       .flight-price {
         text-align: right;
       }
-      .flight-class {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
+
       .flight-class .economy {
         font-weight: bold;
         color: #007bff;
       }
       .btn-book {
         padding: 10px 20px;
-        background-color: #007bff;
+        font-weight: bold;
+        background-color: #5463ff;
         color: #ffffff;
         border: none;
         border-radius: 8px;
@@ -159,13 +168,34 @@
         transition: background-color 0.3s ease;
       }
       .btn-book:hover {
-        background-color: #0056b3;
+        background-color: #4d5aee;
       }
       .book-container {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 20px;
+      }
+      .spinner {
+        display: inline-block;
+        user-select: none;
+      }
+      input[type="text"] {
+        border: 1px solid #ccc;
+        text-align: center;
+        width: 50px;
+      }
+      button {
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: #e8e8e8;
+        color: black;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #dcdcdc;
       }
     </style>
 
@@ -182,7 +212,6 @@
         <div class="form-group mt-3">
           <label for="departure">출발지</label>
           <select class="form-select" id="departure">
-            <option selected>출발지를 선택하세요</option>
             <option value="ICN">서울/인천(ICN)</option>
             <option value="SFO">샌프란시스코(SFO)</option>
             <option value="LAX">로스앤젤레스(LAX)</option>
@@ -194,7 +223,6 @@
         <div class="form-group mt-3">
           <label for="destination">도착지</label>
           <select class="form-select" id="destination">
-            <option selected>도착지를 선택하세요</option>
             <option value="ICN">서울/인천(ICN)</option>
             <option value="SFO">샌프란시스코(SFO)</option>
             <option value="LAX">로스앤젤레스(LAX)</option>
@@ -204,17 +232,23 @@
           </select>
         </div>
         <div class="form-group mt-3">
-          <label for="date-range">날짜 선택</label>
-          <div class="input-group input-daterange">
-            <input type="text" class="form-control" placeholder="가는날" id="start-datepicker" readonly>
-            <input type="text" class="form-control" placeholder="오는날" id="end-datepicker" readonly>
+          <div class="form-group mt-3">
+            <label for="start-datepicker">가는날</label>
+            <input type="date" class="form-control" id="start-datepicker">
+          </div>
+          <div class="form-group mt-3">
+              <label for="end-datepicker">오는날</label>
+              <input type="date" class="form-control" id="end-datepicker">
           </div>
         </div>
         <div class="form-group mt-3">
           <label for="passengers">인원</label>
-          <input type="number" class="form-control" id="passengers" placeholder="인원수를 입력하세요" min="1" max="10">
+          <div class="spinner">
+            <button onclick="decrement()">-</button>
+            <input type="text" id="passengers" readonly value="1">
+            <button onclick="increment()">+</button>
+          </div>
         </div>
-
         <button class="btn btn-search" id="search-btn">항공권 검색</button>
       </div>
       <div class="results-container" id="results-container">
@@ -223,104 +257,197 @@
       <div class="book-container" id="book-container">
         <!-- 예약하기 버튼이 여기에 표시됩니다. -->
       </div>
+      <!-- 로그인 확인 모달 -->
+      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">로그인 필요</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    로그인 후 이용해주세요.
+                </div>
+                <div class="modal-footer">
+                    <a href="/signin.html" class="btn btn-primary">로그인</a>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="NoresultModal" tabindex="-1" aria-labelledby="NoresultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="NoresultModalLabel">결과 없음</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    결과가 검색되지 않았습니다. 옵션 재선택 후 검색해주시기 바랍니다!
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+      </div>
     </div>
+
+    <div class="modal fade" id="NoinputModal" tabindex="-1" aria-labelledby="NoinputModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="NoinputModalLabel">옵션 선택</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                모든 항목을 선택한 후 검색해주시기 바랍니다.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
 
     <div id="footer"></div>
     
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    // Header and Footer Loading
+    fetch("/header.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("header").innerHTML = data;
+            const script = document.createElement('script');
+            script.text = "checkSession();";
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error("Error loading header:", error));
+
+    fetch("/footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer").innerHTML = data;
+        })
+        .catch(error => console.error("Error loading footer:", error));
+
+    
+    document.getElementById('search-btn').addEventListener('click', function() {
+        const resultsContainer = document.getElementById('results-container');
+        const bookContainer = document.getElementById('book-container');
+        resultsContainer.innerHTML = '';
+        bookContainer.innerHTML = '';
+
+        const departure = document.getElementById('departure').value;
+        const destination = document.getElementById('destination').value;
+        const startDate = document.getElementById('start-datepicker').value;
+        const endDate = document.getElementById('end-datepicker').value;
+        const passengers = document.getElementById('passengers').value;
+
+        if (!departure || !destination || !startDate || !endDate || !passengers) {
+            var NoinputModal = new bootstrap.Modal(document.getElementById('NoinputModal'));
+            NoinputModal.show();
+            return;
+        }
+        else{
+          fetch('/backend/search_flight_api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ departure, destination, startDate, endDate, passengers })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error || data.length === 0) {
+              var NoresultModal = new bootstrap.Modal(document.getElementById('NoresultModal'));
+              NoresultModal.show();
+              return;
+            }
+
+            data.forEach(flight => {
+                const flightDiv = document.createElement('div');
+                flightDiv.className = 'flight-result d-flex align-items-center justify-content-between';
+                flightDiv.innerHTML = `
+                    <div class="flight-info">
+                        <div><strong>${flight.departureTime}</strong> - <strong>${flight.arrivalTime}</strong></div>
+                        <div>${flight.departureAirport} -> ${flight.arrivalAirport}</div>
+                        <div>${flight.flightNumber}</div>
+                    </div>
+                    <div class="flight-class"><div class="economy">가격: ${flight.price} KRW</div></div>
+                `;
+                const bookButton = document.createElement('button');
+                bookButton.textContent = '예약하기';
+                bookButton.className = 'btn-book ms-3';
+                bookButton.addEventListener('click', function() {
+                  checkSession().then(isLoggedIn => {
+                      if (isLoggedIn) {
+                          const reservationUrl = `/reservation.html?departure=${encodeURIComponent(flight.departureAirport)}&destination=${encodeURIComponent(flight.arrivalAirport)}&departureTime=${encodeURIComponent(flight.departureTime)}&arrivalTime=${encodeURIComponent(flight.arrivalTime)}&flightNumber=${encodeURIComponent(flight.flightNumber)}&status=${encodeURIComponent(flight.status)}&passengers=${encodeURIComponent(document.getElementById('passengers').value)}`;
+                          window.location.href = reservationUrl;
+                      } else {
+                          // 로그인 모달을 표시
+                          var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                          loginModal.show();
+                      }
+                  });
+              });
+              flightDiv.appendChild(bookButton);
+              resultsContainer.appendChild(flightDiv);
+          });
+        })
+        .catch(error => {
+            console.error('Error fetching flight data:', error);
+        });
+        }
+      }); 
+});
+
+
+      let input = document.getElementById('passengers');
+
+      function increment() {
+        let currentValue = parseInt(input.value);
+        if (currentValue < 10) { // 최대 값 조건
+          input.value = currentValue + 1;
+        }
+      }
+
+      function decrement() {
+        let currentValue = parseInt(input.value);
+        if (currentValue > 1) { // 최소 값 조건
+          input.value = currentValue - 1;
+        }
+      }
+
+      function checkSession() {
+            return fetch('/backend/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    const authButtons = document.getElementById('authButtons');
+                    if (data.loggedIn) {
+                        authButtons.innerHTML = `
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                        `;
+                        return true;
+                    }
+                    else{
+                      return false;
+                    }
+                })
+                .catch(error => {
+                  console.error('Error checking session:', error)
+                  return false;
+                });
+        }
+    </script>
+  </body>
+</html>
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.js"></script>
-
-    <script>
-      $(document).ready(function() {
-        // Load header
-        fetch("/header.html")
-          .then(response => response.text())
-          .then(data => {
-            $("#header").html(data);
-
-            const script = document.createElement('script');
-            script.text = "checkSession();";
-            document.body.appendChild(script);
-          })
-          .catch(error => console.error("Error loading header:", error));
-        
-        // Load footer
-        fetch("/footer.html")
-          .then(response => response.text())
-          .then(data => {
-            $("#footer").html(data);
-          })
-          .catch(error => console.error("Error loading footer:", error));
-        
-        // Initialize date range picker
-        $('.input-daterange').datepicker({
-          format: 'yyyy-mm-dd',
-          autoclose: true,
-          todayHighlight: true,
-          startDate: new Date() // 오늘 날짜 이전은 선택 불가
-        });
-
-        $('#search-btn').click(function() {
-          const departure = $('#departure').val();
-          const destination = $('#destination').val();
-          const startDate = $('#start-datepicker').val();
-          const endDate = $('#end-datepicker').val();
-          const passengers = $('#passengers').val();
-
-          if (!departure || !destination || !startDate || !endDate || !passengers) {
-            alert('모든 항목을 선택해주세요.');
-            return;
-          }
-
-          // flight data
-          fetch('/backend/search_flight_api.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ departure, destination, startDate, endDate, passengers })
-          })
-          .then(response => response.text())  // 응답을 먼저 텍스트로 읽습니다.
-          .then(text => {
-            console.log('Raw response:', text);  // 원시 응답을 출력하여 문제를 확인합니다.
-            return JSON.parse(text);  // 그 다음 JSON으로 파싱합니다.
-          })
-          .then(data => {
-            console.log('Received data:', data);
-            const resultsContainer = $('#results-container');
-            resultsContainer.html(''); // Clear previous results
-
-            if (data.error) {
-              resultsContainer.append('<p>' + data.error + '</p>');
-              return;
-            }
-            data.forEach(flight => {
-              const flightDiv = $('<div class="flight-result">').html(`
-                <div class="flight-info">
-                  <div>
-                    <strong>${flight.departureTime}</strong> - <strong>${flight.arrivalTime}</strong> 
-                  </div>
-                  <div>${flight.departureAirport} -> ${flight.arrivalAirport}</div>
-                  
-                  <div>${flight.flightNumber}</div>
-                  <div>${flight.status}</div>
-                </div>
-                <div class="flight-class">
-                  <div class="economy">가격: ${flight.economyPrice} KRW</div>
-                </div>
-              `);
-              resultsContainer.append(flightDiv);
-            });
-
-          })
-          .catch(error => console.error('Error fetching flight data:', error));
-        });
-      });
-    </script>
-  </body>
-</html>
