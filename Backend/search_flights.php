@@ -28,7 +28,6 @@ if (!$result) {
 }
 if ($result->num_rows == 0) {
     echo json_encode(['error' => 'Flight not found']);
-    console.log("no");
     exit;
 }
 
@@ -43,7 +42,7 @@ while ($row = $result->fetch_assoc()) {
         'status' => $row['status'],
         'departureTime' => $row['departure_time'],
         'arrivalTime' => $row['arrival_time'],
-        // 'Price' => '140,000','
+        'price' => $row['price'],
     ];
 }
 
