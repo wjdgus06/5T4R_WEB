@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Q&A 세부 내용</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+        .logo-img {
+            width: 80px;
+            height: 64px;
+        }
+        
+        .nav-link {
+            margin-right: 15px; /* 항목 간의 간격 조정 */
+            font-family: Arial, sans-serif; /* 글꼴 변경 */
+            font-size: 1rem; /* 글꼴 크기 변경 */
+            font-weight: bold;
+        }
+        .nav-link:last-child {
+            margin-right: 0; /* 마지막 항목의 오른쪽 여백 제거 */
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        .custom-container {
+            max-width: 1000px; /* 원하는 너비로 설정 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+        .question-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .question-date {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333; /* 아래에 선 추가 */
+            padding-bottom: 40px; /* 선과의 간격 조정 */
+        }
+        .question-body {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 20px;
+            white-space: pre-line;
+            min-height: 200px;
+        }
+        .answer-separator {
+            border-top: 1px solid #333;
+            margin: 20px 0;
+        }
+        .answer-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .answer-body {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 20px;
+            white-space: pre-line;
+            display: none; /* 기본적으로 숨김 */
+        }
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        }
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-bottom: 20px; 
+        }
+        .back-button button {
+            background-color: #0a488b;
+            color: white;
+            border: none;
+            padding: 10px 50px;
+            font-size: 1rem;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .back-button button:hover {
+            background-color: #003d80;
+        }
+
+              /* 로그인 버튼 스타일 */
+      .btn-outline-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-outline-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      /* 회원가입 버튼 스타일 */
+      .btn-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load header
+            fetch("header.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("header").innerHTML = data;
+                    checkSession();
+                })
+                .catch(error => console.error("Error loading header:", error));
+
+            // Load footer
+            fetch("footer.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("footer").innerHTML = data;
+                })
+                .catch(error => console.error("Error loading footer:", error));
+
+            const params = new URLSearchParams(window.location.search);
+            const questionId = params.get('id');
+
+            async function fetchQuestionDetail() {
+                const response = await fetch(`/backend/QnA_detail.php?id=${questionId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const question = await response.json();
+                return question;
+            }
+
+            fetchQuestionDetail().then(question => {
+                
+                document.querySelector('.question-title').textContent = question.title;
+                document.querySelector('.question-date').textContent = question.created_at;
+                
+                document.querySelector('.question-body').textContent = question.question_body;
+            
+                if (question.status === 'answered') {
+                    const answerHeader = document.querySelector('.answer-header');
+                    const answerBody = document.querySelector('.answer-body');
+                    const answerSeparator = document.querySelector('.answer-separator');
+                    answerHeader.style.display = 'block';
+                    answerBody.textContent = question.answer_body;
+                    answerBody.style.display = 'block'; // 답변이 있을 경우에만 표시
+                    answerSeparator.style.display = 'block'; // 구분선 표시
+                }
+            }).catch(error => {
+                console.error('Error fetching question detail:', error);
+            });
+
+            document.querySelector('.back-button button').addEventListener('click', function() {
+                window.location.href = '/QnA.html';
+            });
+        });
+        function checkSession() {
+            fetch('/backend/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    const authButtons = document.getElementById('authButtons');
+                    if (data.loggedIn) {
+                        authButtons.innerHTML = `
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                        `;
+                    }
+                    else{
+                        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                        loginModal.show();
+                    }
+                })
+                .catch(error => console.error('Error checking session:', error));
+        }
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+
+    <main id="main-container">
+        <div class="custom-container">
+            <div class="question-title"></div>
+            <div class="question-date"></div>
+            <div class="question-body"></div>
+            <div class="answer-separator" style="display:none;"></div> <!-- 답변과 질문을 구분하는 선 -->
+            <div class="answer-header" style="display:none;">Answer</div> <!-- "Answer" 헤더 -->
+            <div class="answer-body"></div> <!-- 답변 내용 출력 영역 추가 -->
+
+            <div class="back-button">
+                <button>목록으로</button>
+            </div>
+        </div>
+    </main>
+    <div id="footer"></div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

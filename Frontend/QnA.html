@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Air 5T4R</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .logo-img {
+        width: 80px;
+        height: 64px;
+      }
+      .nav-link {
+        margin-right: 15px;
+        font-family: Arial, sans-serif;
+        font-size: 1rem; 
+        font-weight: bold;
+      }
+      .nav-link:last-child {
+        margin-right: 0;
+      }
+
+      /* 로그인 버튼 스타일 */
+      .btn-outline-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-outline-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      /* 회원가입 버튼 스타일 */
+      .btn-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1;
+      }
+      footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+      }
+      .custom-container {
+        max-width: 1000px; /* 원하는 너비로 설정 */
+        margin: 0 auto; /* 가운데 정렬 */
+      }
+      h3{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      .custom-pagination {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+      }
+
+      .custom-pagination .page-item {
+        display: inline-block;
+        margin: 0 5px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .page-item.active {
+        background-color: #6e73eb;
+        color: white;
+        border-radius: 5px;
+      }
+      .question-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      .question-item:hover {
+        background-color: #f1f1f1;
+      }
+      .question-title {
+        flex-grow: 1;
+      }
+      .question-status {
+        font-size: 0.9rem;
+        color: #888;
+        margin-left: 10px;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Load header
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header").innerHTML = data;
+            checkSession();
+          })
+          .catch(error => console.error("Error loading header:", error));
+        
+        // Load footer
+        fetch("footer.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("footer").innerHTML = data;
+          })
+          .catch(error => console.error("Error loading footer:", error));
+
+        let allQuestions = []; // 모든 질문 데이터를 저장할 배열
+        const itemsPerPage = 8; // 페이지당 항목 수
+
+        // 모든 질문 데이터를 서버에서 불러오는 함수
+        async function fetchAllQuestions() {
+          try {
+            const response = await fetch(`/backend/QnA_api.php`);
+            const data = await response.json();
+            allQuestions = data.questions; // 모든 질문 데이터를 저장
+            if (allQuestions && allQuestions.length > 0) {
+              displayQuestions(1); // 첫 페이지의 질문을 표시
+              updatePagination(allQuestions.length, 1); // 페이지네이션 업데이트
+            }
+          } catch (error) {
+            console.error('Error fetching questions:', error);
+          }
+        }
+
+        // 특정 페이지의 질문을 표시하는 함수
+        function displayQuestions(page) {
+          const questionsContainer = document.getElementById('questions');
+          questionsContainer.innerHTML = ''; // 이전 질문들을 지움
+
+          const startIndex = (page - 1) * itemsPerPage;
+          const endIndex = startIndex + itemsPerPage;
+          const pageQuestions = allQuestions.slice(startIndex, endIndex);
+
+          pageQuestions.forEach(question => {
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question-item';
+            questionElement.innerHTML = `
+              <span>${question.title}</span>
+              <span class="question-status">${question.status === 'answered' ? '답변 완료' : '답변 대기'}</span>
+            `; // 질문의 제목과 상태를 표시
+            questionsContainer.appendChild(questionElement);
+            questionElement.addEventListener('click', () => {
+              window.location.href = `QnA_detail.html?id=${question.id}`;
+            });
+          });
+        }
+
+        // 페이지네이션 버튼을 업데이트하는 함수
+        function updatePagination(totalItems, currentPage) {
+          const paginationContainer = document.getElementById('pagination');
+          paginationContainer.innerHTML = ''; // 이전 페이지네이션을 지움
+          const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+          for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = 'page-item page-link' + (i === currentPage ? ' active' : '');
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', (event) => {
+              event.preventDefault();
+              displayQuestions(i);
+              updatePagination(totalItems, i);
+            });
+            paginationContainer.appendChild(pageButton);
+          }
+        }
+
+        // 세션 체크 함수
+        function checkSession() {
+          fetch('/backend/check_session.php')
+            .then(response => response.json())
+            .then(data => {
+              const authButtons = document.getElementById('authButtons');
+              if (data.loggedIn) {
+                authButtons.innerHTML = `
+                  <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                  <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                `;
+                document.getElementById('main-container').style.display = 'block'; // Show main content
+                fetchAllQuestions(); // Initial call to fetch questions
+              } else {
+                var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+              }
+            })
+            .catch(error => console.error('Error checking session:', error));
+        }
+
+        checkSession(); // 세션 체크 함수 호출을 DOMContentLoaded 내부로 이동
+      });
+    </script>
+  </head>
+  <body>
+
+    <div id="header"></div>
+
+    <main id="main-container">
+      <div class="custom-container">
+        <h3>Q&A</h3>
+        <div class="list-group" id="questions">
+          <!-- Q&A 항목이 여기에 추가됩니다 -->
+        </div>
+        <div class="pagination custom-pagination" id="pagination">
+          <!-- 페이지네이션 버튼이 여기에 추가됩니다 -->
+        </div>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">로그인 필요</h5>
+          </div>
+          <div class="modal-body">
+            Q&A 섹션을 보기 위해서는 로그인이 필요합니다.
+          </div>
+          <div class="modal-footer">
+            <a href="/signin.html" class="btn btn-primary">로그인</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  </body>
+</html>
