@@ -8,6 +8,9 @@ switch ($request_method) {
     case 'GET':
         require 'QnA.php';
         break;
+    case 'PUT':
+        require 'QnA_update.php';
+        break;
     default:
         header("HTTP/1.0 405 Method Not Allowed");
         echo json_encode(['error' => 'Method Not Allowed']);
