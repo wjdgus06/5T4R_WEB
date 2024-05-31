@@ -143,6 +143,7 @@
                 <div class="card-body">
                     <h5 class="card-title">예약 정보</h5>
                     <form>
+                        <input type="hidden" id="id">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="departureAirport">출발 공항</label>
@@ -169,8 +170,8 @@
                                 <input type="text" id="flightNumber" class="form-control" disabled>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="status">상태</label>
-                                <input type="text" id="status" class="form-control" disabled>
+                                <label for="price">가격</label>
+                                <input type="text" id="price" class="form-control" disabled>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="passengers">인원</label>
@@ -220,6 +221,22 @@
 
     <div id="footer"></div>
 
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">예약 성공</h5>
+        </div>
+        <div class="modal-body">
+          에약 정보와 탑승자 정보가 확인되었습니다. 결제 방법을 확인하고 예약 확정을 받으세요!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="confirmBtn">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <script>
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
@@ -232,20 +249,27 @@
             }
             return false;
         }
-        
+
+        document.getElementById('id').value = getQueryVariable('id');
         document.getElementById('departureAirport').value = getQueryVariable('departure');
         document.getElementById('arrivalAirport').value = getQueryVariable('destination');
         document.getElementById('departureTime').value = getQueryVariable('departureTime');
         document.getElementById('arrivalTime').value = getQueryVariable('arrivalTime');
         document.getElementById('flightNumber').value = getQueryVariable('flightNumber');
-        document.getElementById('status').value = getQueryVariable('status');
+        document.getElementById('price').value = getQueryVariable('price');
         document.getElementById('passengers').value = getQueryVariable('passengers');
-    
+
     
         document.addEventListener('DOMContentLoaded', function() {
         const passengerCount = parseInt(getQueryVariable('passengers'), 10);
         const container = document.getElementById('passengerInfoContainer');
         
+        let priceText = document.getElementById('price').value;
+        let price = parseFloat(priceText.replace(/,/g, '')); // 쉼표 제거 후 숫자 변환
+        let totalPrice = price * passengerCount; // 총 가격 계산
+        document.getElementById('price').value = totalPrice.toLocaleString(); // 결과를 쉼표 포함 형식으로 다시 변환
+
+
         for (let i = 1; i <= passengerCount; i++) {
             const div = document.createElement('div');
             div.innerHTML = `
@@ -278,7 +302,58 @@
             `;
             container.appendChild(div);
         }
-    });
+      });
+        const reserveButton = document.querySelector('.btn-primary');
+
+        reserveButton.addEventListener('click', function() {
+            const flightId = document.getElementById('id').value;
+            const Total_price = document.getElementById('price').value;
+            let passengers = [];
+
+            // 동적으로 생성된 모든 승객 정보 수집
+            const passengerCount = parseInt(getQueryVariable('passengers'), 10);
+            for (let i = 1; i <= passengerCount; i++) {
+                passengers.push({
+                    firstName: document.getElementById(`firstName${i}`).value,
+                    lastName: document.getElementById(`lastName${i}`).value,
+                    birthDate: document.getElementById(`birthDate${i}`).value,
+                    phone: document.getElementById(`phone${i}`).value,
+                    passport: document.getElementById(`passport${i}`).value
+                });
+            }
+
+            // POST 요청 데이터 설정
+            const postData = {
+                flight_id: flightId,
+                price : Total_price,
+                passengers: passengers
+            };
+            console.log(postData);
+            // 예약 완료 요청 보내기
+            fetch('/backend/reservation_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                  $('#successModal').modal('show');
+                  const confirmBtn = document.getElementById('confirmBtn');
+                  confirmBtn.addEventListener('click', () => {
+                      window.location.href = `/payment_info.html?reservationId=${data.reservation_id}`;
+                  });
+                } else {
+                    alert('예약 실패: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버 에러가 발생했습니다.');
+            });
+        });
 
     function checkSession() {
             return fetch('/backend/check_session.php')
@@ -321,5 +396,6 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </body>
 </html>

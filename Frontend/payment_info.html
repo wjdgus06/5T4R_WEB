@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Air 5T4R</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+        .logo-img {
+            width: 80px;
+            height: 64px;
+        }
+        
+        .nav-link {
+            margin-right: 15px; /* 항목 간의 간격 조정 */
+            font-family: Arial, sans-serif; /* 글꼴 변경 */
+            font-size: 1rem; /* 글꼴 크기 변경 */
+            font-weight: bold;
+        }
+        .nav-link:last-child {
+            margin-right: 0; /* 마지막 항목의 오른쪽 여백 제거 */
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        /* 로그인 버튼 스타일 */
+      .btn-outline-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-outline-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+      /* 회원가입 버튼 스타일 */
+      .btn-primary-custom {
+        color: #000000;
+        background-color: #ffffff;
+        border: none;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+
+      .btn-primary-custom:hover {
+        color: #fff;
+        background-color: #a5cdf7;
+        border: none;
+      }
+
+
+    .payment-title {
+    font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 20px;
+    }
+
+    .payment-detail {
+        font-size: 16px;
+        color: #000000;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .custom-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0efef;
+    }
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load header
+            fetch("header.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("header").innerHTML = data;
+
+                    checkSession(); // 헤더 로드 후 checkSession 호출
+                })
+                .catch(error => console.error("Error loading header:", error));
+            
+            // Load footer
+            fetch("footer.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("footer").innerHTML = data;
+                })
+                .catch(error => console.error("Error loading footer:", error));
+
+            
+                const reservationId = new URLSearchParams(window.location.search).get('reservationId');
+                if (reservationId) {
+                    fetch(`/backend/get_price.php?reservationId=${reservationId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.status === 'success') {
+                                const paymentNotice = document.getElementById('payment-info');
+                                paymentNotice.innerHTML = `
+                                    <h1 class="payment-title">결제 공지</h1>
+                                    <p class="payment-detail">안내드립니다. 현재 예약이 완료되어 입금 대기 상태입니다.</p>
+                                    <p class="payment-detail">예약 번호: : <strong>${reservationId}</strong></p>
+                                    <p class="payment-detail">입금 요청 금액: : ${data.price}원</p>
+                                    <p class="payment-detail">입금 확인 후 예약이 최종 확정됩니다. 예약의 상세 정보 및 확정 상태는 예약 조회 페이지에서 확인 가능합니다.</p>
+                                    <p class="payment-detail">입금은 아래 계좌로 부탁드립니다:)<br>
+                                        [은행 이름]: 하나은행<br>
+                                        [계좌 번호]: 169-351288-103<br>
+                                        [예금주]: 유정현
+                                        </p>
+                                    <p class="payment-detail">입금 후 예약이 정상적으로 진행되지 않을 경우, 고객센터로 문의해 주시기 바랍니다.</p>
+                                    <p class="payment-detail">감사합니다:)</p>
+                                `;
+                            } else {
+                                paymentNotice.innerHTML = `<p>Error: ${data.message}</p>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching price:', error);
+                            document.getElementById('paymentNotice').innerHTML = `<p>Error fetching data</p>`;
+                        });
+                }
+            });
+
+
+        function checkSession() {
+            fetch('/backend/check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    const authButtons = document.getElementById('authButtons');
+                    if (data.loggedIn) {
+                        authButtons.innerHTML = `
+                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                        `;
+                    }
+                })
+                .catch(error => console.error('Error checking session:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkSession();
+        });
+
+
+    </script>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <main id="main-container">
+        <div class="custom-container" id="payment-info">
+        </div>
+    </main>
+
+    <div id="footer"></div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
