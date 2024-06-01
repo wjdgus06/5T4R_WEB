@@ -84,32 +84,26 @@
         background-color: #f8f9fa;
         border-top: 1px solid #e9ecef;
       }
-      .form-container {
-        max-width: 1000px;
-        margin: 50px auto;
-        padding: 30px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-      .form-container h3 {
+
+      h3 {
+        font-size: 23px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
         margin-bottom: 20px;
-        font-size: 24px;
+    }
+
+    h4 {
+        font-size: 18px;
         font-weight: bold;
-      }
-      .form-container .form-label {
-        font-weight: bold;
-      }
-      .form-container .btn-primary {
-        background-color: #5463ff;
-        border: none;
-        width: 100%;
-        padding: 10px;
+        margin-top: 30px;
+    }
+
+    legend {
         font-size: 16px;
-      }
-      .form-container .btn-primary:hover {
-        background-color: #4d5aee;
-      }
+        font-weight: bold;
+        margin-top:10px;
+        color: #4969df;
+    }
     </style>
 
     <script>
@@ -131,42 +125,81 @@
           })
           .catch(error => console.error("Error loading footer:", error));
 
-      const form = document.querySelector('form');
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const lastName = document.getElementById('lastName').value;
-        const firstName = document.getElementById('firstName').value;
-        const reservationNumber = document.getElementById('reservationNumber').value;
-
-        fetch('/backend/reservation_query.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            lastName: lastName,
-            firstName: firstName,
-            reservationNumber: reservationNumber
-          })
+          const reservationId = new URLSearchParams(window.location.search).get('reservation_id');
           
-        })
-        .then(response => response.json())
-        .then(data => {
-          if(data.status === 'error') {
-            const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-            errorModal.show();
-          } else {
-            window.location.href = `/reservation_detail.html?reservation_id=${data.data.reservation_id}`;
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-          errorModal.show();
+          fetch(`/backend/get_reservation_details.php?reservation_id=${reservationId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('reservationDetails').innerHTML = `<p>Error: ${data.error}</p>`;
+                    return;
+                }
+                const { reservation, flight, passengers } = data.data;
+                let html = `
+              <form>
+                <fieldset disabled>
+                  <div class="mb-3">
+                    <label class="form-label">예약 번호</label>
+                    <input type="text" class="form-control" value="${reservation.reservation_id}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">출발 공항</label>
+                    <input type="text" class="form-control" value="${flight.departure_airport}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">도착 공항</label>
+                    <input type="text" class="form-control" value="${flight.arrival_airport}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">편명</label>
+                    <input type="text" class="form-control" value="${flight.flight_number}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">가격</label>
+                    <input type="text" class="form-control" value="${reservation.price}">
+                  </div>
+                </fieldset>
+              </form>`;
+
+            html += '<h4>탑승자 목록</h4>';
+            passengers.forEach((passenger, index) => {
+              html += `
+                <form>
+                    <fieldset disabled>
+                    <legend>탑승자 ${index + 1}</legend>
+                    <div class="mb-3">
+                      <label class="form-label">영문이름</label>
+                      <input type="text" class="form-control" value="${passenger.FirstName}">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">영문성</label>
+                      <input type="text" class="form-control" value="${passenger.LastName}">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">전화번호</label>
+                      <input type="tel" class="form-control" value="${passenger.phone}">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">생년월일</label>
+                      <input type="date" class="form-control" value="${passenger.Birth}">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">여권번호</label>
+                      <input type="text" class="form-control" value="${passenger.passport_number}">
+                    </div>
+                </fieldset>
+                </form>`;
+            });
+
+                document.getElementById('reservationDetails').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                document.getElementById('reservationDetails').innerHTML = '<p>예약 정보를 가져오는 중 오류가 발생했습니다.</p>';
+            });
+        
+    
         });
-      });
-    });
 
 
       function checkSession() {
@@ -195,47 +228,12 @@
 
     <main id="main-container">
       <div class="container">
-        <!-- 예약 조회 UI 시작 -->
-        <div class="form-container">
-          <h3>예약조회</h3>
-          <p>조회할 여정의 예약자 정보를 입력해주세요 :-)</p>
-          <form>
-            <div class="mb-3">
-              <label for="lastName" class="form-label">영문성</label>
-              <input type="text" class="form-control" id="lastName" placeholder="성 입력">
-            </div>
-            <div class="mb-3">
-              <label for="firstName" class="form-label">영문이름</label>
-              <input type="text" class="form-control" id="firstName" placeholder="이름 입력">
-            </div>
-            <div class="mb-3">
-              <label for="reservationNumber" class="form-label">예약번호</label>
-              <input type="text" class="form-control" id="reservationNumber" placeholder="예약번호 입력">
-            </div>
-            <button type="submit" class="btn btn-primary">조회</button>
-          </form>
-        </div>
+        <h3>예약 상세 정보</h3>
+            <div id="reservationDetails"></div>
       </div>
     </main>
 
     <div id="footer"></div>
-
-    <div class="modal" id="errorModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">조회 실패</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <p>입력하신 정보로 예약을 찾을 수 없습니다. 정보를 확인하고 다시 시도해주세요.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          </div>
-        </div>
-      </div>
-    </div>
     
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

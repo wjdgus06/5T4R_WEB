@@ -136,7 +136,6 @@
                     fetch(`/backend/get_price.php?reservationId=${reservationId}`)
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
                             if (data.status === 'success') {
                                 const paymentNotice = document.getElementById('payment-info');
                                 paymentNotice.innerHTML = `
