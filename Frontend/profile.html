@@ -116,7 +116,12 @@
       font-weight: bold;
       font-family: Arial, Helvetica, sans-serif;
     }
-
+    .custom-h2-v2{
+      font-size: 20px;
+      font-weight: bold;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 20px;
+    }
     .btn-primary-Modify {
         color: #ffffff;
         background-color: #5463ff;
@@ -141,8 +146,34 @@
 
     .btn-primary-Delete:hover {
         color: #fff;
-        background-color: #4854e0;
+        background-color: #d03b3b;
         border: none;
+    }
+
+    .reservation-list {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .reservation-entry {
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #e1e1e1;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reservation-entry:hover {
+      background-color: #e0e0e0;
+    }
+
+    .reservation-entry:last-child {
+      border-bottom: none;
     }
 
 
@@ -179,9 +210,66 @@
           document.getElementById('password').value = data.user.password;
           document.getElementById('firstName').value = data.user.FirstName;
           document.getElementById('lastName').value = data.user.LastName;
+        
+          fetchReservations(data.user.user_id);
         })
         .catch(error => console.error('Error fetching user data:', error));
 
+        function fetchReservations(userId) {
+          fetch(`/backend/getmy_reservation.php?user_id=${userId}`)  // 사용자 ID를 쿼리 파라미터로 전달
+              .then(response => response.json())
+              .then(data => {
+                  updateReservationList(data.reservations);
+              })
+              .catch(error => console.error('Error fetching reservations:', error));
+        }
+
+        function updateReservationList(reservations) {
+          const list = document.getElementById('reserve_List');
+          list.innerHTML = '';
+
+          reservations.forEach(reservation => {
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'reservation-entry';
+
+            const reservationText = document.createElement('span');
+            reservationText.textContent = `${reservation.reservation_id}`;
+            entryDiv.appendChild(reservationText);
+
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = '예약취소';
+            cancelButton.className = 'btn btn-primary-Delete';
+            cancelButton.onclick = function() {
+                cancelReservation(reservation.reservation_id); 
+            };
+            entryDiv.appendChild(cancelButton);
+
+            list.appendChild(entryDiv);
+        });
+        }
+
+        function cancelReservation(reservationId) {
+          if (confirm('예약을 취소하시겠습니까?')) {
+              fetch(`/backend/reservation_api.php?id=${reservationId}`, {
+                  method: 'DELETE',
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert('예약이 취소되었습니다.');
+
+                      const userId = document.getElementById('id').value;
+                      fetchReservations(userId);
+                  } else {
+                      alert('예약 취소 실패: ' + data.message);
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('서버 오류로 예약 취소에 실패했습니다.');
+              });
+          }
+      }
       function checkSession() {
         fetch('/backend/check_session.php')
           .then(response => response.json())
@@ -257,6 +345,7 @@
           console.error('Error:', error);
         }
       });
+
   });
 
   </script>
@@ -299,8 +388,13 @@
         <button type="submit" class="btn btn-primary-Modify" id="update-user-btn" >변경</button>
         <button type="submit" class="btn btn-primary-Delete" id="delete-user-btn">탈퇴</button>
       </form>
-    </div>
-        
+      <div></div>
+      <div class="custom-h2-v2">나의 예약</div>
+      <hr>
+        <div class="form-group">
+          <label for="id">예약번호</label>
+          <div class="reservation-list" id="reserve_List">
+        </div>
     </div>
   </main>
 
