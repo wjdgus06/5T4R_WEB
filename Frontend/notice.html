@@ -188,7 +188,7 @@
                     const noticeItem = document.createElement('div');
                     noticeItem.classList.add('notice-item');
                     noticeItem.addEventListener('click', () => {
-                        window.location.href = `notice_detail.html?id=${notice.id}`;
+                        window.location.href = `notice_detail?id=${notice.id}`;
                     });
 
                     const noticeTitle = document.createElement('div');
@@ -247,8 +247,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                     }
                 })

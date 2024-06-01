@@ -269,7 +269,7 @@
                     로그인 후 이용해주세요.
                 </div>
                 <div class="modal-footer">
-                    <a href="/signin.html" class="btn btn-primary">로그인</a>
+                    <a href="/signin" class="btn btn-primary">로그인</a>
                 </div>
             </div>
         </div>
@@ -386,7 +386,7 @@
                 bookButton.addEventListener('click', function() {
                   checkSession().then(isLoggedIn => {
                       if (isLoggedIn) {
-                          const reservationUrl = `/reservation.html?id=${encodeURIComponent(flight.id)}&departure=${encodeURIComponent(flight.departureAirport)}&destination=${encodeURIComponent(flight.arrivalAirport)}&departureTime=${encodeURIComponent(flight.departureTime)}&arrivalTime=${encodeURIComponent(flight.arrivalTime)}&flightNumber=${encodeURIComponent(flight.flightNumber)}&price=${encodeURIComponent(flight.price)}&passengers=${encodeURIComponent(document.getElementById('passengers').value)}`;
+                          const reservationUrl = `/reservation?id=${encodeURIComponent(flight.id)}&departure=${encodeURIComponent(flight.departureAirport)}&destination=${encodeURIComponent(flight.arrivalAirport)}&departureTime=${encodeURIComponent(flight.departureTime)}&arrivalTime=${encodeURIComponent(flight.arrivalTime)}&flightNumber=${encodeURIComponent(flight.flightNumber)}&price=${encodeURIComponent(flight.price)}&passengers=${encodeURIComponent(document.getElementById('passengers').value)}`;
                           window.location.href = reservationUrl;
                       } else {
                           // 로그인 모달을 표시
@@ -430,8 +430,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                         return true;
                     }

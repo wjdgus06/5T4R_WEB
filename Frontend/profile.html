@@ -277,8 +277,8 @@
             const authButtons = document.getElementById('authButtons');
             if (data.loggedIn) {
               authButtons.innerHTML = `
-                <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
               `;
             }
           })
@@ -340,7 +340,7 @@
 
           const result = await response.json();
           // Success
-          window.location.href = '/index.html';
+          window.location.href = '/index';
         } catch (error) {
           console.error('Error:', error);
         }
@@ -416,7 +416,6 @@
     </div>
   </div>
 
-  <!-- 탈퇴 확인 모달 HTML 코드 -->
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

@@ -348,7 +348,7 @@
                   $('#successModal').modal('show');
                   const confirmBtn = document.getElementById('confirmBtn');
                   confirmBtn.addEventListener('click', () => {
-                      window.location.href = `/payment_info.html?reservationId=${data.reservation_id}`;
+                      window.location.href = `/payment_info?reservationId=${data.reservation_id}`;
                   });
                 } else {
                     alert('예약 실패: ' + data.message);
@@ -367,8 +367,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                         return true;
                     }

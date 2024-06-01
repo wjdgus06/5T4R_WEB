@@ -196,7 +196,7 @@
             });
 
             document.querySelector('.back-button button').addEventListener('click', function() {
-                window.location.href = '/QnA.html';
+                window.location.href = '/QnA';
             });
         });
         function checkSession() {
@@ -206,8 +206,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                     }
                     else{

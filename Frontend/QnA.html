@@ -189,7 +189,7 @@
             `; // 질문의 제목과 상태를 표시
             questionsContainer.appendChild(questionElement);
             questionElement.addEventListener('click', () => {
-              window.location.href = `QnA_detail.html?id=${question.id}`;
+              window.location.href = `QnA_detail?id=${question.id}`;
             });
           });
         }
@@ -221,8 +221,8 @@
               const authButtons = document.getElementById('authButtons');
               if (data.loggedIn) {
                 authButtons.innerHTML = `
-                  <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                  <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                  <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                  <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                 `;
                 document.getElementById('main-container').style.display = 'block'; // Show main content
                 fetchAllQuestions(); // Initial call to fetch questions
@@ -266,7 +266,7 @@
             Q&A 섹션을 보기 위해서는 로그인이 필요합니다.
           </div>
           <div class="modal-footer">
-            <a href="/signin.html" class="btn btn-primary">로그인</a>
+            <a href="/signin" class="btn btn-primary">로그인</a>
           </div>
         </div>
       </div>

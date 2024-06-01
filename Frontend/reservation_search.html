@@ -157,7 +157,7 @@
             const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
             errorModal.show();
           } else {
-            window.location.href = `/reservation_detail.html?reservation_id=${data.data.reservation_id}`;
+            window.location.href = `/reservation_detail?reservation_id=${data.data.reservation_id}`;
           }
         })
         .catch((error) => {
@@ -176,8 +176,8 @@
                     const authButtons = document.getElementById('authButtons');
                     if (data.loggedIn) {
                         authButtons.innerHTML = `
-                            <a href="/logout.html" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
-                            <a href="/profile.html" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
+                            <a href="/logout" class="btn btn-outline-primary-custom me-2" id="logoutButton">로그아웃</a>
+                            <a href="/profile" class="btn btn-outline-primary-custom me-2" id="profileButton">나의 정보</a>
                         `;
                     }
                 })
