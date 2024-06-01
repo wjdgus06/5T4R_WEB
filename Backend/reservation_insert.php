@@ -48,8 +48,10 @@ $reservation_id = generateSecureRandomID($connect);
 $flight_id = $data['flight_id'];
 $price = $data['price'];
 $passengers = $data['passengers'];
+$lastName = $data['lastName'];
+$firstName = $data['firstName'];
 
-$sql = "INSERT INTO Reservation (reservation_id, user_id, flight_id, price) VALUES ('$reservation_id', '$user', '$flight_id', '$price')";
+$sql = "INSERT INTO Reservation (reservation_id, user_id, flight_id, price, lastname, firstname) VALUES ('$reservation_id', '$user', '$flight_id', '$price', '$lastName', '$firstName')";
 $result = $connect->query($sql);
 
 if (!$result) {

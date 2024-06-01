@@ -189,11 +189,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="firstName" class="form-label">영문이름</label>
-                                <input type="text" class="form-control" id="firstName" placeholder="여권에 표시된 영문 이름 입력" disabled>
+                                <input type="text" class="form-control" id="FirstName" placeholder="여권에 표시된 영문 이름 입력">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="lastName" class="form-label">영문성</label>
-                                <input type="text" class="form-control" id="lastName" placeholder="여권에 표시된 영문 성 입력" disabled>
+                                <input type="text" class="form-control" id="LastName" placeholder="여권에 표시된 영문 성 입력">
                             </div>
                         </div>
                         <div class="row">
@@ -308,6 +308,9 @@
         reserveButton.addEventListener('click', function() {
             const flightId = document.getElementById('id').value;
             const Total_price = document.getElementById('price').value;
+            const mainFirstName = document.getElementById('FirstName').value; // 예매자의 영문 이름
+            const mainLastName = document.getElementById('LastName').value; // 예매자의 영문 성
+        
             let passengers = [];
 
             // 동적으로 생성된 모든 승객 정보 수집
@@ -326,7 +329,9 @@
             const postData = {
                 flight_id: flightId,
                 price : Total_price,
-                passengers: passengers
+                passengers: passengers,
+                firstName : mainFirstName,
+                lastName : mainLastName
             };
             console.log(postData);
             // 예약 완료 요청 보내기
@@ -382,8 +387,8 @@
         .then(response => response.json())
         .then(data => {
             if (data.user) {
-                document.getElementById('firstName').value = data.user.FirstName;
-                document.getElementById('lastName').value = data.user.LastName;
+                document.getElementById('FirstName').value = data.user.FirstName;
+                document.getElementById('LastName').value = data.user.LastName;
                 document.getElementById('email').value = data.user.email;
                 document.getElementById('phone').value = data.user.phone;
             } else {
