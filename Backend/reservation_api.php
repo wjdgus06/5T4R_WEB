@@ -9,7 +9,7 @@ switch ($request_method) {
         break;
 
     case 'POST':
-        require 'reservation.php';
+        require 'reservation_insert.php';
         break;
 
     case 'PUT':
