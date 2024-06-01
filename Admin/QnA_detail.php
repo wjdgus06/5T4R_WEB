@@ -131,6 +131,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                 document.querySelector('.question-title').textContent = question.title;
                 document.querySelector('.question-date').textContent = question.created_at;
                 document.querySelector('.question-body').textContent = question.question_body;
+                document.querySelector('.question-id').textContent =  "user_id: " +question.user_id;
 
                 const answerForm = document.querySelector('.answer-form textarea');
                 if (question.status === 'answered') {
@@ -203,8 +204,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
         <div class="custom-container">
             <div class="question-title"></div>
+            <div class="question-id"></div>
             <div class="question-date"></div>
             <div class="question-body"></div>
+
+            
             <div class="answer-header">Answer</div>
             <form class="answer-form">
                 <textarea class="form-control" rows="5"></textarea>
