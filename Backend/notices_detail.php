@@ -10,7 +10,7 @@ if ($id == 0) {
     exit;
 }
 
-$sql= "SELECT id, notice_date, title, content, body FROM Notice WHERE id = $id";
+$sql= "SELECT id, notice_date, title, content, body, original_filename FROM Notice WHERE id = $id";
 $result = $connect->query($sql);
 
 if ($result->num_rows == 0) {
