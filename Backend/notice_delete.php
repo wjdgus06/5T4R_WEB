@@ -7,22 +7,33 @@ error_log("DELETE data: " . json_encode($_DELETE));
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $sql = "DELETE FROM Notice WHERE id = '$id'";
-
-    error_log("SQL query: " . $sql);
+    $sql = "SELECT filepath FROM Notice WHERE id = '$id'";
     $result = $connect->query($sql);
-
-    if ($result) {
-        echo json_encode(['success' => true, 'message' => '삭제 성공']);
+ 
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $filePath = $row['filepath'];
+    
+        $sqlDelete = "DELETE FROM Notice WHERE id = '$id'";
+        if ($connect->query($sqlDelete) === TRUE) {
+    
+            if (file_exists($filePath)) {
+                if (unlink($filePath)) {
+                    echo json_encode(['success' => true, 'message' => 'Record and file deleted successfully.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to delete file.']);
+                }
+            }
+            else {
+                echo json_encode(['success' => true, 'message' => 'Record deleted successfully, file not found.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error deleting record: ' . $connect->error]);
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => '삭제 실패']);
+        echo json_encode(['success' => false, 'message' => 'No record found with id ' . $noticeId]);
     }
 }
-else{
-    echo json_encode(['error' => 'ID is required']);
-}
-
-
 
 $connect->close();
 ?>

@@ -34,6 +34,7 @@ if ($result->num_rows == 0) {
 $flights = [];
 while ($row = $result->fetch_assoc()) {
     $flights[] = [
+        'id' => $row['id'],
         'flightNumber' => $row['flight_number'],
         'departureAirport' => $row['departure_airport'],
         'arrivalAirport' => $row['arrival_airport'],
