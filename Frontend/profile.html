@@ -340,6 +340,7 @@
 
           const result = await response.json();
           // Success
+          fetch('/backend/logout.php')
           window.location.href = '/index';
         } catch (error) {
           console.error('Error:', error);
