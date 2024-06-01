@@ -284,6 +284,8 @@
                 </div>
                 <div class="modal-body">
                     결과가 검색되지 않았습니다. 옵션 재선택 후 검색해주시기 바랍니다!
+                    <br>
+                    <span style="color: red; font-weight : bold;">참고!</span> 출발지 또는 도착지는 인천(ICN)으로 선택해야 합니다.
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -384,7 +386,7 @@
                 bookButton.addEventListener('click', function() {
                   checkSession().then(isLoggedIn => {
                       if (isLoggedIn) {
-                          const reservationUrl = `/reservation.html?departure=${encodeURIComponent(flight.departureAirport)}&destination=${encodeURIComponent(flight.arrivalAirport)}&departureTime=${encodeURIComponent(flight.departureTime)}&arrivalTime=${encodeURIComponent(flight.arrivalTime)}&flightNumber=${encodeURIComponent(flight.flightNumber)}&status=${encodeURIComponent(flight.status)}&passengers=${encodeURIComponent(document.getElementById('passengers').value)}`;
+                          const reservationUrl = `/reservation.html?id=${encodeURIComponent(flight.id)}&departure=${encodeURIComponent(flight.departureAirport)}&destination=${encodeURIComponent(flight.arrivalAirport)}&departureTime=${encodeURIComponent(flight.departureTime)}&arrivalTime=${encodeURIComponent(flight.arrivalTime)}&flightNumber=${encodeURIComponent(flight.flightNumber)}&price=${encodeURIComponent(flight.price)}&passengers=${encodeURIComponent(document.getElementById('passengers').value)}`;
                           window.location.href = reservationUrl;
                       } else {
                           // 로그인 모달을 표시

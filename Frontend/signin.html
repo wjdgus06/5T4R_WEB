@@ -143,7 +143,11 @@
           const result = await response.json();
           
           if (result.success) {
-            window.location.href = '/'; // 리다이렉트할 메인 화면 URL
+            if (result.role === 'admin') {
+                window.location.href = '/admin'; // 관리자 대시보드로 리다이렉트
+            } else {
+                window.location.href = '/'; // 일반 사용자 대시보드로 리다이렉트
+            }
           } else {
               messageDiv.textContent = result.message; // 메시지 표시
               messageDiv.style.color = 'red'; // 메시지 스타일 설정
