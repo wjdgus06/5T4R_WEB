@@ -3,7 +3,7 @@ session_start();
 
 // 관리자 권한이 없으면 로그인 페이지나 다른 페이지로 리다이렉트
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: /signin.html');
+    header('Location: /signin');
     exit;
 }
 ?>
@@ -143,7 +143,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             });
 
             document.querySelector('.back-button button').addEventListener('click', function() {
-                window.location.href = '/admin/QnA.html';
+                window.location.href = '/admin/QnA.php';
             });
 
             document.querySelector('.answer-form').addEventListener('submit', async function(event) {
