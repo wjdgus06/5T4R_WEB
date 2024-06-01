@@ -107,10 +107,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
             document.getElementById('update-notice-btn').addEventListener('click', async function(event) {
                 event.preventDefault();
 
-                const title = document.getElementById('title').value;
-                const date = document.getElementById('date').value;
-                const summary = document.getElementById('summary').value;
-                const content = document.getElementById('content').value;
+                const data = {
+                    id: noticeId,
+                    title: document.getElementById('title').value,
+                    date: document.getElementById('date').value,
+                    summary: document.getElementById('summary').value,
+                    content: document.getElementById('content').value
+                };
+
                 const fileInput = document.getElementById('file');
                 try {
                     const response = await fetch('/backend/notices_api.php', {
@@ -118,8 +122,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ id: noticeId, title, date, summary, content })
+                        body: JSON.stringify(data)
                     });
+
                     const result = await response.json();
                     if (result.success) {
                         // 파일이 있는 경우, 파일 업로드 진행 (POST 요청)

@@ -8,8 +8,9 @@ $notice_date = $data['date'];
 $content = $data['summary'];
 $body = $data['content'];
 
-$sql = "update Notice set title='$title', notice_date='$notice_date', content='$content', body='$body' where id = '$id'";
-$result = $connect->query($sql);
+$stmt = $connect->prepare("UPDATE Notice SET title=?, notice_date=?, content=?, body=? WHERE id=?");
+$stmt->bind_param("ssssi", $title, $notice_date, $content, $body, $id);
+$result = $stmt->execute();
 
 header('Content-Type: application/json');
 

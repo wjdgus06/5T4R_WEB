@@ -20,8 +20,10 @@ $notice_date = $_POST['date'];
 $content = $_POST['summary'];
 $body = $_POST['content'];
 
-$sql = "insert into Notice (title, notice_date, content, body, filepath, original_filename) Values ('$title', '$notice_date', '$content', '$body', '$filePath', '$originalName')";
-$result = $connect->query($sql);
+$stmt = $connect->prepare("INSERT INTO Notice (title, notice_date, content, body, filepath, original_filename) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssss", $title, $notice_date, $content, $body, $filePath, $originalName);
+
+$result = $stmt->execute();
 
 header('Content-Type: application/json');
 
