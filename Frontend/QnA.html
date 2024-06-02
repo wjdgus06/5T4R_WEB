@@ -133,6 +133,13 @@
         color: #888;
         margin-left: 10px;
       }
+      .btn-primary-custom-QNA {
+          color: #ffffff;
+          background-color: #426af8;
+          border: none;
+          font-family: 'Arial', sans-serif;
+          font-weight: bold;
+      }
     </style>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
@@ -153,6 +160,12 @@
           })
           .catch(error => console.error("Error loading footer:", error));
 
+          const registerBtn = document.getElementById('registerQnABtn');
+            if (registerBtn) {
+              registerBtn.addEventListener('click', function() {
+                window.location.href = '/registerQnA'; // Update this URL to the path of your Q&A registration page
+              });
+            }
         let allQuestions = []; // 모든 질문 데이터를 저장할 배열
         const itemsPerPage = 8; // 페이지당 항목 수
 
@@ -245,12 +258,15 @@
     <main id="main-container">
       <div class="custom-container">
         <h3>Q&A</h3>
+        <button type="button" class="btn btn-primary-custom-QNA mb-3" id="registerQnABtn">QnA 등록</button>
+
         <div class="list-group" id="questions">
           <!-- Q&A 항목이 여기에 추가됩니다 -->
         </div>
         <div class="pagination custom-pagination" id="pagination">
           <!-- 페이지네이션 버튼이 여기에 추가됩니다 -->
         </div>
+
       </div>
     </main>
 

@@ -143,8 +143,22 @@
         background-color: #a5cdf7;
         border: none;
       }
+
+      .edit-delete-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-bottom: 20px;
+        }
     </style>
     <script>
+        
         document.addEventListener("DOMContentLoaded", function() {
             // Load header
             fetch("header.html")
@@ -198,6 +212,38 @@
             document.querySelector('.back-button button').addEventListener('click', function() {
                 window.location.href = '/QnA';
             });
+
+            const editButton = document.getElementById('editButton');
+ 
+            document.getElementById('deleteButton').addEventListener('click', function() {
+                var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                deleteModal.show();
+            });
+
+            editButton.addEventListener('click', function() {
+                window.location.href = `/QnA_edit?id=${questionId}`; // 수정 페이지로 리디렉션
+            });
+
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+                fetch(`/backend/QnA_api.php?id=${questionId}`,{ method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/QnA'; // 목록 페이지로 리디렉션
+                    } else {
+                        alert('삭제 실패: ' + data.message);
+                    }
+                    var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                    deleteModal.hide(); // 모달 닫기
+                })
+                .catch(error => {
+                    console.error('Error deleting question:', error);
+                })
+                .finally(() => {
+                    var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                    deleteModal.hide(); // 항상 모달 닫기
+                });
+            });
         });
         function checkSession() {
             fetch('/backend/check_session.php')
@@ -231,6 +277,11 @@
             <div class="answer-header" style="display:none;">Answer</div> <!-- "Answer" 헤더 -->
             <div class="answer-body"></div> <!-- 답변 내용 출력 영역 추가 -->
 
+            <div class="edit-delete-buttons" style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                <button id="editButton" class="btn btn-outline-success"><strong>수정</strong></button>
+                <button id="deleteButton" class="btn btn-outline-danger"><strong>삭제</strong></button>
+            </div>
+
             <div class="back-button">
                 <button>목록으로</button>
             </div>
@@ -238,6 +289,25 @@
     </main>
     <div id="footer"></div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteConfirmationModalLabel">질문 삭제 확인</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            이 질문을 삭제하시겠습니까?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

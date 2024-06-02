@@ -17,7 +17,7 @@ $check_sql = "SELECT user_id FROM users WHERE user_id = '$user_id'";
 $check_result = $connect->query($check_sql);
 
 if ($check_result->num_rows > 0) {
-    echo json_encode(['success' => false, 'message' => 'user_id가 동일합니다.']);
+    echo json_encode(['success' => false, 'message' => '동일한 ID가 존재합니다.']);
 } else {
     $sql = "insert into users (user_id, FirstName, LastName, password, phone, email) Values ('$user_id', '$firstname', '$lastname', '$password', '$phone', '$email')";
     $result = $connect->query($sql);

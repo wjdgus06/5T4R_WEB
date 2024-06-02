@@ -51,8 +51,9 @@ $passengers = $data['passengers'];
 $lastName = $data['lastName'];
 $firstName = $data['firstName'];
 
-$sql = "INSERT INTO Reservation (reservation_id, user_id, flight_id, price, lastname, firstname) VALUES ('$reservation_id', '$user', '$flight_id', '$price', '$lastName', '$firstName')";
-$result = $connect->query($sql);
+$stmt = $connect->prepare("INSERT INTO Reservation (reservation_id, user_id, flight_id, price, lastname, firstname) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param('ssssss', $reservation_id, $user, $flight_id, $price, $lastName, $firstName);
+$result = $stmt->execute();
 
 if (!$result) {
     echo json_encode(array("status" => "error", "message" => "Error executing query: " . $connect->error));
@@ -66,8 +67,10 @@ foreach ($passengers as $passenger) {
     $phone = $connect->real_escape_string($passenger['phone']);
     $passport = $connect->real_escape_string($passenger['passport']);
 
-    $sql = "INSERT INTO Passenger_info (reservation_id, FirstName, LastName, Birth, phone, passport_number) VALUES ('$reservation_id', '$firstName', '$lastName', '$birthDate', '$phone', '$passport')";
-    $result = $connect->query($sql);
+    $stmt = $connect->prepare("INSERT INTO Passenger_info (reservation_id, FirstName, LastName, Birth, phone, passport_number) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param('ssssss', $reservation_id, $firstName, $lastName, $birthDate, $phone, $passport);
+    $result = $stmt->execute();
+    
     if (!$result) {
         echo json_encode(array("status" => "error", "message" => "Error executing query: " . $connect->error));
         exit;
