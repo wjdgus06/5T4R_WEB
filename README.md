@@ -34,3 +34,6 @@
 | ![image](https://github.com/wjdgus06/5T4R_WEB/assets/63927229/7aa98276-8bea-4d41-9b36-28ea8b44953c) |
 
 ## 💻모의해킹
+
+## 📑결과보고서
+
