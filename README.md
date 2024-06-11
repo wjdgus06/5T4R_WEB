@@ -34,6 +34,20 @@
 | ![image](https://github.com/wjdgus06/5T4R_WEB/assets/63927229/7aa98276-8bea-4d41-9b36-28ea8b44953c) |
 
 ## 💻모의해킹
-
+- 블랙박스 모의해킹
+  1. SQL INJECTION
+  2. XSS
+  3. CSRF
+  4. 자동화 공격
+  5. 쿠키변조
+     <br>등등...
+- 화이트박스 보안조치
+   
 ## 📑결과보고서
+- 주요정보통신기반시설 기술적 취약점 가이드의 웹 취약점을 기준으로 보고서를 작성하였습니다.<br>
+  -> [주요정보통신기반시설 취약점 가이드]
+- [결과보고서(작성중...)](https://onedrive.live.com/view.aspx?resid=12292B38C6B97DAF!10239&authkey=!AN4lrLFyY0jvQHI)
+## 📢발표자료
+[발표자료](https://github.com/user-attachments/files/15788016/default.pdf)
+
 
