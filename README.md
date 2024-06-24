@@ -1,11 +1,16 @@
 ## 5T4R_WEB
 모의해킹을 위해 취약한 웹 사이트를 제작하였습니다.
 
-## 목적
+## ⛳목적
 1. 개발역량 강화
 2. 주요정보통신기반시설 가이드에 대한 이해도 상승
 3. 모의해킹 실무 역량 강화
 4. 산출물(결과보고서) 작성을 통한 실무 역량 강화
+
+## 🛠️구조
+AWS를 통해 배포하였으며, APM(APACHE, PHP, MySQL)로 구성하였습니다.<br>
+
+<img src="https://github.com/wjdgus06/5T4R_WEB/assets/63927229/c3d1076c-9e3f-43f7-b184-75fea0cc3ca9" width="500">
 
 ## 🔍주요 기능
 
@@ -35,13 +40,26 @@
 
 ## 💻모의해킹
 - 블랙박스 모의해킹
-  1. SQL INJECTION
-  2. XSS
-  3. CSRF
-  4. 자동화 공격
-  5. 쿠키변조
-     <br>등등...
+    > 시나리오 1. SQL INJECTION취약점을 통한 DB정보 유출 <br>
+    <img src="https://github.com/wjdgus06/5T4R_WEB/assets/63927229/47bc4b51-ec15-466a-8de6-6d20acd7b94d" width="500">
+    
+     https://github.com/wjdgus06/5T4R_WEB/assets/63927229/7bf09d3f-1afd-4dd8-b322-b538da4b9a04
+
+
+    > 시나리오 2. XSS취약점을 통한 세션 탈취 <br>
+    <img src="https://github.com/wjdgus06/5T4R_WEB/assets/63927229/80b65534-3d13-4d15-a346-539b1735fec3" width="500">
+    
+    https://github.com/wjdgus06/5T4R_WEB/assets/63927229/7409f241-f31d-4328-87b8-394c9a607746
+
+                   
+    > 시나리오 3. FILE UPLOAD취약점을 통한 서버 내부 파일 탈취 <br>
+    <img src="https://github.com/wjdgus06/5T4R_WEB/assets/63927229/aeac3445-3204-4be9-b178-295edfb506a9" width="500">
+    
+    https://github.com/wjdgus06/5T4R_WEB/assets/63927229/d311c04e-9cf2-41a7-8468-878f4512b9eb
+
+    
 - 화이트박스 보안조치
+- 이행점검
    
 ## 📑결과보고서
 - 주요정보통신기반시설 기술적 취약점 가이드의 웹 취약점을 기준으로 보고서를 작성하였습니다.<br>
@@ -49,6 +67,6 @@
 
 - [결과보고서(작성중...)](https://onedrive.live.com/view.aspx?resid=12292B38C6B97DAF!10239&authkey=!AN4lrLFyY0jvQHI)
 ## 📢발표자료
-[발표자료](https://github.com/user-attachments/files/15788016/default.pdf)
 
+[모의해킹_발표자료.pdf](https://github.com/user-attachments/files/15951361/_._.pdf)
 
