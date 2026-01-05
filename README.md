@@ -65,7 +65,8 @@ AWS를 통해 배포하였으며, APM(APACHE, PHP, MySQL)로 구성하였습니�
 - 주요정보통신기반시설 기술적 취약점 가이드의 웹 취약점을 기준으로 보고서를 작성하였습니다.<br>
   -> [주요정보통신기반시설 취약점 가이드](https://github.com/user-attachments/files/15813556/_._._._._._.pdf)
 
-- [결과보고서(작성중...)](https://onedrive.live.com/view.aspx?resid=12292B38C6B97DAF!10239&authkey=!AN4lrLFyY0jvQHI)
+- [결과보고서][결과보고서.pdf](https://github.com/user-attachments/files/24434164/default.pdf)
+
 ## 📢발표자료
 
 [모의해킹_발표자료.pdf](https://github.com/user-attachments/files/15951361/_._.pdf)
